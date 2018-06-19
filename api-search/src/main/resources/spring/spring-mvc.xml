@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd  
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd  
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd 
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+
+	<!--annotation configuration -->
+	<context:component-scan base-package="com.hlb.apisearch.controller" />
+	
+	<!-- 主要作用于@Controller，激活该模式 下面是一种简写形式，完全可以手动配置替代这种简写形式； 它会自动注册DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter 
+		两个bean, 是spring MVC为@Controllers分发请求所必须的 -->
+	<mvc:annotation-driven />
+	
+	<!-- <mvc:default-servlet-handler /> -->
+	
+	
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="webBindingInitializer">
+			<bean class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">  
+				<property name="conversionService" ref="conversionService" />  
+			</bean>  			
+		</property>
+		<property name="messageConverters">
+			<list>
+				<bean
+					class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+				<bean
+					class="org.springframework.http.converter.StringHttpMessageConverter">
+					<constructor-arg index="0" value="UTF-8" />  
+					<property name="writeAcceptCharset" value="false" />
+					<property name="supportedMediaTypes">
+ 						<list> 
+						<value>text/html;charset=UTF-8</value> 
+						<value>text/plain;charset=UTF-8</value>
+						<value>application/json;charset=UTF-8</value>
+					</list> 
+					</property>
+				</bean>				
+				<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+					<property name="supportedMediaTypes"> 
+					<list> 
+						<value>text/html;charset=UTF-8</value> 
+						<value>text/plain;charset=UTF-8</value>
+						<value>application/json;charset=UTF-8</value>
+					</list> 
+					</property>				
+				</bean>
+			</list>			
+		</property>
+	</bean>		
+	
+	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">  
+		<property name="converters">  
+	    	<list>  
+	        	<bean class="com.hlb.app.core.framework.converter.DateConverter" />  
+	    	</list>  
+		</property>  
+	</bean>	
+	
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" >
+	</bean>
+	
+</beans>

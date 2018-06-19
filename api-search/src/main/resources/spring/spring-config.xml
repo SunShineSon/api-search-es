@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+       default-autowire="byType">
+
+	<context:component-scan base-package="com.hlb.apisearch" />
+	<context:component-scan base-package="com.hlb.app" />
+    <context:component-scan base-package="com.hlb.base" />
+    
+   <!--  很多类没有使用接口，因此不能使用proxy-target-class="true"  -->
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+    <!-- 开启@AspectJ AOP代理 -->  
+	<!-- <aop:aspectj-autoproxy/> -->
+	
+	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/> 
+	
+	<context:annotation-config />
+	<bean id="configHelper" class="com.hlb.app.core.framework.helper.ConfigHelper" />
+
+
+	
+</beans>
